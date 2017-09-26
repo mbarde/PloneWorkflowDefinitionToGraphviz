@@ -6,5 +6,6 @@ Usage: `python wtg.py definition.xml`
 Output will be Graphviz graph as pdf file
 
 Dependencies:
-Graphviz: http://www.graphviz.org/Download..php
-Simple Python interface for Graphviz: https://pypi.python.org/pypi/graphviz
+
+*  Graphviz: http://www.graphviz.org/Download..php
+*  Simple Python interface for Graphviz: https://pypi.python.org/pypi/graphviz
