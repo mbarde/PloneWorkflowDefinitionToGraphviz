@@ -21,11 +21,19 @@ for trans in root.findall('transition'):
   newTrans['label'] = trans.get('title')
 
   guard_roles = []
+  guard_permissions = []
   for guard in trans.findall('guard'):
     for guard_role in guard.findall('guard-role'):
       guard_roles.append( guard_role.text )
+
+    for guard_permission in guard.findall('guard-permission'):
+      guard_permissions.append( guard_permission.text )
+
   if len(guard_roles) > 0:
     newTrans['label'] += '\n(' + ',\n'.join(guard_roles) + ')'
+
+  if len(guard_permissions) > 0:
+    newTrans['label'] += '\n(' + ',\n'.join(guard_permissions) + ')'
 
   transitions[newTrans['id']] = newTrans
 
