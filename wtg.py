@@ -1,3 +1,4 @@
+from copy import deepcopy
 import sys
 import xml.etree.ElementTree
 from graphviz import Digraph
@@ -73,7 +74,7 @@ for state in root.findall('state'):
     dot.node(node_id, label, shape='box')
 
     for exTrans in state.findall('exit-transition'):
-        newEdge = transitions[exTrans.get('transition_id')]
+        newEdge = deepcopy(transitions[exTrans.get('transition_id')])
         newEdge['from'] = node_id
         edges.append(newEdge)
 
