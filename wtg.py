@@ -1,7 +1,9 @@
 from copy import deepcopy
-import sys
-import xml.etree.ElementTree
 from graphviz import Digraph
+from xml.etree.ElementTree import parse as parseXML
+
+import sys
+
 
 if len(sys.argv) < 2:
     sys.exit(0)
@@ -11,7 +13,7 @@ xmlfile = sys.argv[1]
 useIdsAsLabels = '--use-ids' in sys.argv
 hideGuards = '--hide-guards' in sys.argv
 
-root = xml.etree.ElementTree.parse(xmlfile).getroot()
+root = parseXML(xmlfile).getroot()
 
 title = root.get('title')
 
