@@ -7,6 +7,9 @@ if len(sys.argv) < 2:
 
 xmlfile = sys.argv[1]
 
+useIdsAsLabels = '--use-ids' in sys.argv
+hideGuards = '--hide-guards' in sys.argv
+
 root = xml.etree.ElementTree.parse(xmlfile).getroot()
 
 title = root.get('title')
@@ -18,22 +21,27 @@ for trans in root.findall('transition'):
     newTrans = dict()
     newTrans['id'] = trans.get('transition_id')
     newTrans['to'] = trans.get('new_state')
-    newTrans['label'] = trans.get('title')
+    if useIdsAsLabels is True:
+        newTrans['label'] = trans.get('transition_id')
+    else:
+        newTrans['label'] = trans.get('title')
 
-    guard_roles = []
-    guard_permissions = []
-    for guard in trans.findall('guard'):
-        for guard_role in guard.findall('guard-role'):
-            guard_roles.append(guard_role.text)
+    if not hideGuards:
+        guard_roles = []
+        guard_permissions = []
 
-        for guard_permission in guard.findall('guard-permission'):
-            guard_permissions.append(guard_permission.text)
+        for guard in trans.findall('guard'):
+            for guard_role in guard.findall('guard-role'):
+                guard_roles.append(guard_role.text)
 
-    if len(guard_roles) > 0:
-        newTrans['label'] += '\n(' + ',\n'.join(guard_roles) + ')'
+            for guard_permission in guard.findall('guard-permission'):
+                guard_permissions.append(guard_permission.text)
 
-    if len(guard_permissions) > 0:
-        newTrans['label'] += '\n(' + ',\n'.join(guard_permissions) + ')'
+        if len(guard_roles) > 0:
+            newTrans['label'] += '\n(' + ',\n'.join(guard_roles) + ')'
+
+        if len(guard_permissions) > 0:
+            newTrans['label'] += '\n(' + ',\n'.join(guard_permissions) + ')'
 
     transitions[newTrans['id']] = newTrans
 
@@ -45,7 +53,10 @@ if len(sys.argv) > 2:
 
 for state in root.findall('state'):
     node_id = state.get('state_id')
-    label = state.get('title')
+    if useIdsAsLabels is True:
+        label = state.get('state_id')
+    else:
+        label = state.get('title')
 
     # if demanded include role names which have a certian permission
     # into state label
