@@ -10,8 +10,9 @@ if len(sys.argv) < 2:
 
 xmlfile = sys.argv[1]
 
-useIdsAsLabels = '--use-ids' in sys.argv
 hideGuards = '--hide-guards' in sys.argv
+useIdsAsLabels = '--use-ids' in sys.argv
+withPermissions = '--with-permissions' in sys.argv
 
 root = parseXML(xmlfile).getroot()
 
@@ -49,10 +50,6 @@ for trans in root.findall('transition'):
     transitions[newTrans['id']] = newTrans
 
 edges = []
-include_permission_roles_of = ""
-
-if len(sys.argv) > 2:
-    include_permission_roles_of = sys.argv[2]
 
 for state in root.findall('state'):
     node_id = state.get('state_id')
@@ -61,17 +58,14 @@ for state in root.findall('state'):
     else:
         label = state.get('title')
 
-    # if demanded include role names which have a certian permission
-    # into state label
-    if len(include_permission_roles_of) > 0:
+    if withPermissions:
         for trans_map in state.findall('permission-map'):
-            name = trans_map.get('name')
-            if name == include_permission_roles_of:
-                roles = []
-                for role in trans_map.findall('permission-role'):
-                    roles.append(role.text)
-                label += '\n[' + include_permission_roles_of + ']\n' + ',\n' \
-                    .join(roles) + ''
+            permissionName = trans_map.get('name')
+            roles = []
+            for role in trans_map.findall('permission-role'):
+                roles.append(role.text)
+            label += '\n\n[' + permissionName + ']\n' + ', ' \
+                .join(roles) + ''
 
     dot.node(node_id, label, shape='box')
 

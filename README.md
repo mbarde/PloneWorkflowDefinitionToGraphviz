@@ -5,7 +5,7 @@ Usage examples:
 
 ```
 python wtg.py definition.xml
-python wtg.py definition.xml --use-ids --hide-guards
+python wtg.py definition.xml --use-ids --hide-guards --with-permissions
 ```
 
 Optional parameters:
