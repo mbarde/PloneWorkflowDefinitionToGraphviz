@@ -14,6 +14,13 @@ hideGuards = '--hide-guards' in sys.argv
 useIdsAsLabels = '--use-ids' in sys.argv
 withPermissions = '--with-permissions' in sys.argv
 
+outputFormat = 'pdf'
+for arg in sys.argv[2:]:
+    if arg.startswith('--format='):
+        val = arg.split('=', 1)[1]
+        if val in ['pdf', 'jpg', 'png']:
+            outputFormat = val
+
 root = parseXML(xmlfile).getroot()
 
 title = root.get('title')
@@ -77,4 +84,4 @@ for state in root.findall('state'):
 for edge in edges:
     dot.edge(edge['from'], edge['to'], label=edge['label'])
 
-dot.render(xmlfile + '.gv', view=True)
+dot.render(xmlfile + '.gv', view=True, format=outputFormat)
