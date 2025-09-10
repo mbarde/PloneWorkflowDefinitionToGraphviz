@@ -1,4 +1,6 @@
 *.pdf
+*.jpg
+*.png
 *.xml
 *.swp
 *.gv
